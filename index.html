@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pokédex Blog</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Pokédex Blog</h1>
+    <p>Discover and explore Pokémon like a true trainer!</p>
+  </header>
+
+  <section class="search">
+    <input type="text" id="pokemonInput" placeholder="Search Pokémon by name or ID" />
+    <button onclick="getPokemon()">Search</button>
+  </section>
+
+  <main id="pokedex" class="pokedex">
+    <!-- Pokémon blog cards will appear here -->
+  </main>
+
+  <footer>
+    <p>Powered by the <a href="https://pokeapi.co" target="_blank">PokéAPI</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  loadInitialPokemon(10);
+});
+
+async function loadInitialPokemon(count) {
+  const pokedex = document.getElementById("pokedex");
+  pokedex.innerHTML = "";
+
+  for (let i = 1; i <= count; i++) {
+    try {
+      const res = await fetch(https://pokeapi.co/api/v2/pokemon/${i});
+      const data = await res.json();
+      pokedex.appendChild(createCard(data));
+    } catch (error) {
+      console.error("Failed to load Pokémon:", i, error);
+    }
+  }
+}
+
+async function getPokemon() {
+  const input = document.getElementById("pokemonInput").value.toLowerCase();
+  const pokedex = document.getElementById("pokedex");
+
+  if (!input) return;
+
+  try {
+    const res = await fetch(https://pokeapi.co/api/v2/pokemon/${input});
+    const data = await res.json();
+    pokedex.innerHTML = "";
+    pokedex.appendChild(createCard(data));
+  } catch (error) {
+    pokedex.innerHTML = <p style="text-align:center;">Pokémon not found. Try again.</p>;
+  }
+}
+
+function createCard(data) {
+  const card = document.createElement("div");
+  card.className = "pokemon-card";
+  card.innerHTML = `
+    <img src="${data.sprites.front_default}" alt="${data.name}" />
+    <div class="info">
+      <p><strong>${capitalize(data.name)}</strong></p>
+      <p>ID: ${data.id}</p>
+    </div>
+  `;
+  card.addEventListener("click", () => showModal(data));
+  return card;
+}
+
+async function showModal(data) {
+  
+  const speciesRes = await fetch(data.species.url);
+  const speciesData = await speciesRes.json();
+  const entry = speciesData.flavor_text_entries.find(
+    (e) => e.language.name === "en"
+  );
+
+  const evolutionChainRes = await fetch(speciesData.evolution_chain.url);
+  const evolutionChainData = await evolutionChainRes.json();
+  
+  
+  const evolutionLine = buildEvolutionLine(evolutionChainData.chain);
+
+  const stats = data.stats.map(stat => {
+    return ${capitalize(stat.stat.name)}: ${stat.base_stat};
+  }).join(", ");
+
+
+  const modal = document.createElement("div");
+  modal.className = "modal";
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <span class="close-button" onclick="this.parentElement.parentElement.remove()">×</span>
+      <h2>${capitalize(data.name)} (ID: ${data.id})</h2>
+      <img src="${data.sprites.front_default}" alt="${data.name}" />
+      <p><strong>Type:</strong> ${data.types.map(t => capitalize(t.type.name)).join(', ')}</p>
+      <p><strong>Height:</strong> ${data.height}</p>
+      <p><strong>Weight:</strong> ${data.weight}</p>
+      <p><strong>Entry:</strong> ${entry ? entry.flavor_text.replace(/\n|\f/g, ' ') : 'No entry available.'}</p>
+      <p><strong>Stats:</strong> ${stats}</p>
+      <p><strong>Evolution Line:</strong> ${evolutionLine}</p>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+}
+
+function buildEvolutionLine(chain) {
+  let evolutionLine = [];
+  let current = chain;
+
+  while (current) {
+    evolutionLine.push(capitalize(current.species.name));
+    current = current.evolves_to[0]; 
+  }
+
+  return evolutionLine.join(" → ");
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+</script>
+</html>

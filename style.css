@@ -1,0 +1,158 @@
+/* General body styling */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #2b2d42; /* Dark background */
+  color: #fff; /* White text for contrast */
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the body takes at least the full viewport height */
+}
+
+/* Header */
+header {
+  background-color: #ef5350; /* Pokémon red */
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Header title */
+header h1 {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+/* Header subtext */
+header p {
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+}
+
+/* Search bar container */
+.search {
+  text-align: center;
+  padding: 1rem;
+  background-color: #333; /* Dark gray background */
+  border-bottom: 2px solid #444; /* Slightly lighter border */
+}
+
+input[type="text"] {
+  padding: 12px;
+  width: 250px;
+  max-width: 80%;
+  font-size: 16px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  margin-right: 10px;
+  background-color: #444; /* Dark gray input background */
+  color: white;
+}
+
+button {
+  padding: 12px 25px;
+  background-color: #1e88e5; /* Blue accent */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #1565c0; /* Slightly darker blue */
+}
+
+/* Main content area (pokedex cards) */
+main.pokedex {
+  max-width: 1100px;
+  margin: 2rem auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  padding: 0 1rem;
+  justify-items: center;
+  flex-grow: 1; /* This ensures the main content takes up remaining space */
+}
+
+/* Pokémon card styles */
+.pokemon-card {
+  background-color: #444; /* Dark gray card background */
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  text-align: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.pokemon-card:hover {
+  transform: scale(1.05);
+  background-color: #555; /* Slight hover effect */
+}
+
+.pokemon-card img {
+  width: 100px;
+  height: 100px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: #333; /* Dark footer background */
+  color: #bbb; /* Light gray footer text */
+  margin-top: auto; /* Ensures footer is pushed to the bottom */
+}
+
+footer a {
+  color: #ef5350; /* Pokémon red for footer links */
+  text-decoration: none;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background for modal */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #333; /* Dark gray modal background */
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #bbb;
+}
+
+.close-button:hover {
+  color: #fff; /* White close button on hover */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
