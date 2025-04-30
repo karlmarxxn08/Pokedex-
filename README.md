@@ -1,1 +1,1 @@
-karlpokedex.netlify.app
+https://karlpokedex.netlify.app/
